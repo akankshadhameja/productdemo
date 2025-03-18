@@ -30,6 +30,18 @@ renderDecisions: true,
     }
   }
 });</script>
+    <script>
+      alloy("sendEvent", {
+    xdm: {
+        web: {
+            webInteraction: {
+                name: "Link Click",
+                type: "other"
+            }
+        }
+    }
+});
+    </script>
 
   </head>
   <body>
