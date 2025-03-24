@@ -110,6 +110,15 @@ alloy("configure", {
     }
   });
     </script>
+    <script>
+      alloy("sendEvent", {
+    renderDecisions: true,
+    xdm: {},
+    data: {}
+  }).then(function(result) {
+    handleResponseTokens(result); //custom method that processes response tokens, see definition example below
+  });
+    </script>
   </head>
   <body>
     <div>
