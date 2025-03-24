@@ -42,6 +42,21 @@ renderDecisions: true,
     }
 });
     </script>
+    <script>
+      alloy("sendEvent", {
+  xdm: {
+    "identityMap": {
+      "ID_NAMESPACE": [
+        {
+          "id": "1234",
+          "authenticatedState": "ambiguous",
+          "primary": true
+        }
+      ]
+    }
+  }
+});
+    </script>
 
   </head>
   <body>
