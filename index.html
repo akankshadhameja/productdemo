@@ -94,6 +94,22 @@ alloy("configure", {
   data: {}
 });
     </script>
+    <script>
+      alloy("sendEvent", {
+    renderDecisions: true,
+    xdm: {},
+    data: {
+      __adobe: {
+        target: {
+          "profile.gender": "female",
+          "entity.id": 1234,
+          "user.categoryId": "outerwear,jackets",
+          "foo": "bar"
+        }
+      }
+    }
+  });
+    </script>
   </head>
   <body>
     <div>
