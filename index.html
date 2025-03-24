@@ -119,6 +119,19 @@ alloy("configure", {
     handleResponseTokens(result); //custom method that processes response tokens, see definition example below
   });
     </script>
+    <script>
+      alloy("sendEvent", {
+      renderDecisions: true,
+      data: {
+        __adobe: {
+          target: {
+            "entity.id": "123",
+            "entity.genre": "Drama"
+          }
+        }
+      }
+    });
+    </script>
   </head>
   <body>
     <div>
