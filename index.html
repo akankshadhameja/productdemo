@@ -209,6 +209,60 @@ alloy("sendEvent", {
     }
   });
     </script>
+    <script>
+      alloy("sendEvent", {
+  xdm: {},
+  decisionScopes: ['discount']
+}).then(function(result) {
+  var propositions = result.propositions;
+  var discountProposition;
+  if (propositions) {
+    // Find the discount proposition, if it exists.
+    for (var i = 0; i < propositions.length; i++) {
+      var proposition = propositions[i];
+      if (proposition.scope === "discount") {
+        discountProposition = proposition;
+        break;
+      }
+    }
+  }
+  if (discountProposition) {
+    // Find the item from proposition that should be rendered.
+    // Rather than assuming there a single item that has HTML
+    // content, find the first item whose schema indicates
+    // it contains HTML content.
+    for (var j = 0; j < discountProposition.items.length; j++) {
+      var discountPropositionItem = discountProposition.items[i];
+      if (discountPropositionItem.schema === "https://ns.adobe.com/personalization/html-content-item") {
+        var discountHtml = discountPropositionItem.data.content;
+        // Render the content
+        var dailySpecialElement = document.getElementById("daily-special");
+        dailySpecialElement.innerHTML = discountHtml;
+
+        // For this example, we assume there is only a single place to update in the HTML.
+        break;
+      }
+    }
+    // Send a "decisioning.propositionDisplay" event signaling that the proposition has been rendered.
+    alloy("sendEvent", {
+      xdm: {
+        eventType: "decisioning.propositionDisplay",
+        _experience: {
+          decisioning: {
+            propositions: [
+              {
+                id: discountProposition.id,
+                scope: discountProposition.scope,
+                scopeDetails: discountProposition.scopeDetails
+              }
+            ]
+          }
+        }
+      }
+    });
+  }
+});
+    </script>
   </head>
   <body>
     <div>
