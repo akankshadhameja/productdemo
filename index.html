@@ -155,6 +155,60 @@ function getMetadata(scopes){
   return metadata;
 }
     </script>
+    <script>
+      function getContentForPropositions(data, props){
+  let content = [];
+  if (data.propositions) {
+    data.propositions.forEach(proposition => {
+      proposition.items.forEach(item => {
+        if (item.schema === "https://ns.adobe.com/personalization/html-content-item") {
+          content.push({
+            scope: "",
+          });
+        }
+      });
+    });
+
+  }
+  return content;
+}
+
+alloy("sendEvent", {
+    xdm: {...},
+    decisionScopes: ["__view__"]
+  }).then(function(result) {
+    getContentForPropositions(result, ["myScope1"]);
+    if (result.propositions) {
+      result.propositions.forEach(proposition => {
+        proposition.items.forEach(item => {
+          if (item.schema === HTML_SCHEMA) {
+            // manually apply offer
+            document.getElementById("form-based-offer-container").innerHTML =
+              item.data.content;
+            const executedPropositions = [
+              {
+                id: proposition.id,
+                scope: proposition.scope,
+                scopeDetails: proposition.scopeDetails
+              }
+            ];
+            // manually send the display notification event, so that Target/Analytics impressions are increased
+            alloy("sendEvent",{
+              "xdm": {
+                "eventType": "decisioning.propositionDisplay",
+                "_experience": {
+                  "decisioning": {
+                    "propositions": executedPropositions
+                  }
+                }
+              }
+            });
+          }
+        });
+      });
+    }
+  });
+    </script>
   </head>
   <body>
     <div>
