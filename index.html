@@ -307,6 +307,22 @@ alloy("sendEvent", {
   }
 });
     </script>
+    <script>
+      alloy("sendEvent", {
+  "documentUnloading": true, // sends as a beacon
+  "xdm": {
+    "eventType": "commerce.purchases",
+    "commerce": {
+      "order": {
+        "purchaseID": "a8g784hjq1mnp3",
+        "purchaseOrderNumber": "VAU3123",
+        "currencyCode": "USD",
+        "priceTotal": 999.98
+      }
+    }
+  }
+});
+    </script>
   </head>
   <body>
     <div>
