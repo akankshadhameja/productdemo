@@ -323,6 +323,20 @@ alloy("sendEvent", {
   }
 });
     </script>
+    <script>
+      alloy("sendEvent", {
+      xdm: {
+        "identityMap": {
+          "ID_NAMESPACE": [
+            {
+              "id": "1234",
+              "authenticatedState": "authenticated"
+            }
+          ]
+        }
+      }
+    });
+    </script>
   </head>
   <body>
     <div>
