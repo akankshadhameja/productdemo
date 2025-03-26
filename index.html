@@ -116,11 +116,44 @@ renderDecisions: true,
       "xdm": {
         "web": {
           "webPageDetails": {
-            "viewName":"scope1" //<--
+            "viewName":"home" //<--
           }
         }
       }
     });
+    </script>
+    <script>
+      alloy("sendEvent", {
+  renderDecisions: false,
+}).then(function(result) {
+  return alloy("applyPropositions", {
+    propositions: retrievedPropositions,
+    metadata: getMetadata(scopes)
+  }).then(function(applyPropositionsResult) {
+    alloy("sendEvent", { // Send the display notifications
+      xdm: {
+        eventType: "decisioning.propositionDisplay",
+        _experience: {
+          decisioning: {
+            propositions: applyPropositionsResult.propositions
+          }
+        }
+      }
+    });
+    handleResponseTokens(applyPropositionsResult);
+  });
+});
+
+function getMetadata(scopes){
+  let metadata = {};
+  scopes.forEach(function(scope){
+    metadata[scope] = {
+      selector: "head",
+      actionType: "appendHtml"
+    }
+  });
+  return metadata;
+}
     </script>
   </head>
   <body>
