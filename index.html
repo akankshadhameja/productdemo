@@ -110,6 +110,18 @@ renderDecisions: true,
       }
     });
     </script>
+    <script>
+      alloy("sendEvent", {
+      "renderDecisions": true, //<--
+      "xdm": {
+        "web": {
+          "webPageDetails": {
+            "viewName":"home" //<--
+          }
+        }
+      }
+    });
+    </script>
   </head>
   <body>
     <div>
