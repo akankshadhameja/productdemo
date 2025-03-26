@@ -263,6 +263,50 @@ alloy("sendEvent", {
   }
 });
     </script>
+    <script>
+      alloy("sendEvent", {
+  xdm: { ...},
+  decisionScopes: ["hero-banner"]
+}).then(function (result) {
+  var propositions = result.propositions;
+
+  if (propositions) {
+    // Find the discount proposition, if it exists.
+    for (var i = 0; i < propositions.length; i++) {
+      var proposition = propositions[i];
+      for (var j = 0; j < proposition.items.length; j++) {
+        var item = proposition.items[j];
+
+        if (item.schema === "https://ns.adobe.com/personalization/measurement") {
+          // add metric to the DOM element
+          const button = document.getElementById("form-based-click-metric");
+
+          button.addEventListener("click", event => {
+            const executedPropositions = [
+              {
+                id: proposition.id,
+                scope: proposition.scope,
+                scopeDetails: proposition.scopeDetails
+              }
+            ];
+            // send the click track event
+            alloy("sendEvent", {
+              "xdm": {
+                "eventType": "decisioning.propositionInteract",
+                "_experience": {
+                  "decisioning": {
+                    "propositions": executedPropositions
+                  }
+                }
+              }
+            });
+          });
+        }
+      }
+    }
+  }
+});
+    </script>
   </head>
   <body>
     <div>
